@@ -1,0 +1,16 @@
+{
+  "name": "public-api",
+  "version": "0.1.0",
+  "description": "a simple public api",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  }
+}
