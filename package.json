@@ -4,6 +4,9 @@
   "description": "a simple public api",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": "10.16.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
