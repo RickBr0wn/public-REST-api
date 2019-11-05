@@ -10,8 +10,8 @@ let CONNECTED = 'Not connected to database.'
 // Connect to mongoDB
 mongoose
   .connect(
-    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@basic-backend-api-nnvyx.mongodb.net/test?retryWrites=true&w=majority`,
-    { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }
+    `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds243148.mlab.com:43148/public-api`,
+    { useUnifiedTopology: true, useNewUrlParser: true }
   )
   .then(data => {
     CONNECTED = 'We are now connected to the database'
@@ -23,8 +23,38 @@ mongoose
 
 mongoose.Promise = global.Promise
 
-app.get('/', (req, res) => res.send(CONNECTED))
+// Routes
+app.get('/test-route', (req, res) =>
+  res.json({
+    location: {
+      page: '/test-route'
+    }
+  })
+)
 
-app.get('/test-route', (req, res) => res.send(`<h1>../test-route</h1>`))
+app.use('/', (req, res) =>
+  res.json({
+    location: {
+      page: '/'
+    }
+  })
+)
+
+// Display a 404 - not found page
+app.use((req, res, next) => {
+  const err = new Error('404 - Not found')
+  err.status = 404
+  next(err)
+})
+
+// Final catch all error
+app.use((err, req, res, next) => {
+  res.status(err.status || 500)
+  res.json({
+    err: {
+      message: err.message
+    }
+  })
+})
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
