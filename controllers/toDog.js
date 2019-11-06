@@ -1,6 +1,8 @@
 const ToDog = require('../models/toDog')
 const mongoose = require('mongoose')
 
+const constants = require('../constants')
+
 exports.get_all_to_dogs = (req, res, next) => {
   res.status = 200
 
@@ -10,14 +12,14 @@ exports.get_all_to_dogs = (req, res, next) => {
     .then(docs => {
       if (docs.length === 0) {
         res.json({
-          route: '/get-all-to-dogs/',
+          route: constants.BASE_URL + '/get-all-to-dogs/',
           status: 200,
-          error: `The database collection called 'to-dogs' is empty.`
+          message: `Welcome to to-dogs. Please add a new 'to-dog' to get started.`
         })
       }
 
       const response = {
-        route: '/get-all-to-dogs',
+        route: constants.BASE_URL + '/get-all-to-dogs',
         status: res.status,
         error: false,
         count: docs.length,
@@ -29,7 +31,7 @@ exports.get_all_to_dogs = (req, res, next) => {
           urgent: doc.urgent,
           request: {
             type: 'GET',
-            url: 'get-single-to-dog/' + doc._id
+            url: constants.BASE_URL + '/get-single-to-dog/' + doc._id
           }
         }))
       }
@@ -39,7 +41,7 @@ exports.get_all_to_dogs = (req, res, next) => {
     .catch(err => {
       res.status = err.status || 500
       res.json({
-        route: '/get-all-to-dogs/',
+        route: constants.BASE_URL + '/get-all-to-dogs/',
         status: err.status,
         error: err.message
       })
