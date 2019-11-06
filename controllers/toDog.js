@@ -10,16 +10,16 @@ exports.get_all_to_dogs = (req, res, next) => {
     .then(docs => {
       if (docs.length === 0) {
         res.json({
-          error: {
-            hasError: true,
-            error: `The database collection called 'to-dogs' is empty.`
-          }
+          route: BASE_URL + '/get-all-to-dogs/',
+          status: 200,
+          error: `The database collection called 'to-dogs' is empty.`
         })
       }
 
       const response = {
-        route: '/get-all-to-dogs',
+        route: BASE_URL + '/get-all-to-dogs',
         status: res.status,
+        error: false,
         count: docs.length,
         toDogs: docs.map(doc => ({
           _id: doc._id,
@@ -29,9 +29,7 @@ exports.get_all_to_dogs = (req, res, next) => {
           urgent: doc.urgent,
           request: {
             type: 'GET',
-            url:
-              'https://warm-island-43015.herokuapp.com/get-single-to-dog/' +
-              doc._id
+            url: BASE_URL + 'get-single-to-dog/' + doc._id
           }
         }))
       }
@@ -39,13 +37,11 @@ exports.get_all_to_dogs = (req, res, next) => {
       res.json(response)
     })
     .catch(err => {
-      console.log(err)
-      res.status = 500
+      res.status = err.status || 500
       res.json({
-        error: {
-          hasError: true,
-          error: err.message
-        }
+        route: BASE_URL + '/get-all-to-dogs/',
+        status: err.status,
+        error: err.message
       })
     })
 }

@@ -10,21 +10,10 @@ const toDogRoutes = require('./routes/toDog')
 
 // Constants
 const PORT = process.env.PORT || 3000
-
-// Connect to mongoDB
-// mongoose
-//   .connect(
-//     `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds243148.mlab.com:43148/public-api`,
-//     { useUnifiedTopology: true, useNewUrlParser: true }
-//   )
-//   .then(data => {
-//     console.log(
-//       `Welcome ${process.env.MONGO_USER}, You are now connected to ${process.env.MONGO_DB}.`
-//     )
-//   })
-//   .catch(err => console.log(err))
-
-// mongoose.Promise = global.Promise
+const BASE_URL =
+  process.env.NODE_ENV === 'development'
+    ? 'localhost:3000'
+    : 'https://warm-island-43015.herokuapp.com'
 
 mongoose.connect(
   `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds243148.mlab.com:43148/public-api`,
@@ -56,19 +45,14 @@ app.use((req, res, next) => {
 // Routes
 app.use('/get-all-to-dogs/', toDogRoutes)
 
-app.get('/test-route', (req, res) => {
-  res.status = 200
-  res.json({
-    route: '/test-route',
-    status: res.status
-  })
-})
-
+// Default route
 app.use('/', (req, res) => {
   res.status = 200
   res.json({
     route: '/',
-    status: res.status
+    status: res.status,
+    error: false,
+    availableRoutes: [BASE_URL + '/get-all-to-dogs/']
   })
 })
 
@@ -77,9 +61,10 @@ app.use((req, res, next) => {
   const err = new Error('404 - Not found')
   err.status = 404
   res.json({
-    err: {
-      message: err.message
-    }
+    route: '404 - Not Found.',
+    status: err.status,
+    error: err.message,
+    availableRoutes: [BASE_URL + '/get-all-to-dogs/']
   })
   next(err)
 })
@@ -88,9 +73,10 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   res.status = err.status || 500
   res.json({
-    err: {
-      message: err.message
-    }
+    route: 'Unknown Error.',
+    status: err.status,
+    error: err.message,
+    availableRoutes: [BASE_URL + '/get-all-to-dogs/']
   })
 })
 
