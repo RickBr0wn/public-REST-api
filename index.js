@@ -5,24 +5,35 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
+// Route imports
+const toDogRoutes = require('./routes/toDog')
+
+// Constants
 const PORT = process.env.PORT || 3000
-let CONNECTED = 'Not connected to database.'
 
 // Connect to mongoDB
-mongoose
-  .connect(
-    `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds243148.mlab.com:43148/public-api`,
-    { useUnifiedTopology: true, useNewUrlParser: true }
-  )
-  .then(data => {
-    CONNECTED = 'We are now connected to the database'
-    console.log(
-      `Welcome ${process.env.MONGO_USER}, You are now connected to ${process.env.MONGO_DB}.`
-    )
-  })
-  .catch(err => console.log(err))
+// mongoose
+//   .connect(
+//     `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds243148.mlab.com:43148/public-api`,
+//     { useUnifiedTopology: true, useNewUrlParser: true }
+//   )
+//   .then(data => {
+//     console.log(
+//       `Welcome ${process.env.MONGO_USER}, You are now connected to ${process.env.MONGO_DB}.`
+//     )
+//   })
+//   .catch(err => console.log(err))
 
-mongoose.Promise = global.Promise
+// mongoose.Promise = global.Promise
+
+mongoose.connect(
+  `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds243148.mlab.com:43148/public-api`,
+  { useUnifiedTopology: true, useNewUrlParser: true }
+)
+
+const db = mongoose.connection
+
+db.on('error', console.error.bind(console, 'MongoDB error!'))
 
 // include bodyParser, so req.body can be accessible
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -43,32 +54,39 @@ app.use((req, res, next) => {
 })
 
 // Routes
-app.get('/test-route', (req, res) =>
-  res.json({
-    location: {
-      page: '/test-route'
-    }
-  })
-)
+app.use('/get-all-to-dogs/', toDogRoutes)
 
-app.use('/', (req, res) =>
+app.get('/test-route', (req, res) => {
+  res.status = 200
   res.json({
-    location: {
-      page: '/'
-    }
+    route: '/test-route',
+    status: res.status
   })
-)
+})
+
+app.use('/', (req, res) => {
+  res.status = 200
+  res.json({
+    route: '/',
+    status: res.status
+  })
+})
 
 // Display a 404 - not found page
 app.use((req, res, next) => {
   const err = new Error('404 - Not found')
   err.status = 404
+  res.json({
+    err: {
+      message: err.message
+    }
+  })
   next(err)
 })
 
 // Final catch all error
 app.use((err, req, res, next) => {
-  res.status(err.status || 500)
+  res.status = err.status || 500
   res.json({
     err: {
       message: err.message
