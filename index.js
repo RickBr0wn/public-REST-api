@@ -12,10 +12,10 @@ const toDogRoutes = require('./routes/toDog')
 const constants = require('./constants')
 
 // Connect to database, and handle any errors
-mongoose.connect(
-  `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds243148.mlab.com:43148/public-api`,
-  { useUnifiedTopology: true, useNewUrlParser: true }
-)
+mongoose.connect(process.env.MONGO_URL, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true
+})
 
 const db = mongoose.connection
 
