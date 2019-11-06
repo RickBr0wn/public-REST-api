@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 })
 
 // Routes
-app.use('/get-all-to-dogs/', toDogRoutes)
+app.use('/to-dog-api/', toDogRoutes)
 
 // Create an error for 404 - Not Found routes
 app.use('/', (req, res, next) => {
@@ -56,7 +56,20 @@ app.use((err, req, res, next) => {
     url: constants.BASE_URL + req.originalUrl,
     status: err.status,
     error: err.message,
-    routes: [constants.BASE_URL + '/get-all-to-dogs/']
+    routes: [
+      {
+        type: 'GET',
+        url: constants.BASE_URL + '/to-dog-api/get-all-to-dogs/'
+      },
+      {
+        type: 'GET',
+        url: constants.BASE_URL + '/to-dog-api/get-single-to-dog/' + ':toDogId'
+      },
+      {
+        type: 'POST',
+        url: constants.BASE_URL + '/to-dog-api/create-new-to-dog/'
+      }
+    ]
   })
 })
 
