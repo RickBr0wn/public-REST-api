@@ -10,14 +10,14 @@ exports.get_all_to_dogs = (req, res, next) => {
     .then(docs => {
       if (docs.length === 0) {
         res.json({
-          route: BASE_URL + '/get-all-to-dogs/',
+          route: '/get-all-to-dogs/',
           status: 200,
           error: `The database collection called 'to-dogs' is empty.`
         })
       }
 
       const response = {
-        route: BASE_URL + '/get-all-to-dogs',
+        route: '/get-all-to-dogs',
         status: res.status,
         error: false,
         count: docs.length,
@@ -29,7 +29,7 @@ exports.get_all_to_dogs = (req, res, next) => {
           urgent: doc.urgent,
           request: {
             type: 'GET',
-            url: BASE_URL + 'get-single-to-dog/' + doc._id
+            url: 'get-single-to-dog/' + doc._id
           }
         }))
       }
@@ -39,7 +39,7 @@ exports.get_all_to_dogs = (req, res, next) => {
     .catch(err => {
       res.status = err.status || 500
       res.json({
-        route: BASE_URL + '/get-all-to-dogs/',
+        route: '/get-all-to-dogs/',
         status: err.status,
         error: err.message
       })
