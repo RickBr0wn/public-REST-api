@@ -68,9 +68,11 @@ exports.get_single_to_dog = (req, res, next) => {
           }
         })
       } else {
-        res
-          .status(404)
-          .json({ message: 'No valid entry found for provided Object ID' })
+        res.status = 404
+        res.json({
+          error: true,
+          message: 'No valid entry found for provided Object ID'
+        })
       }
     })
     .catch(err => {
@@ -78,7 +80,8 @@ exports.get_single_to_dog = (req, res, next) => {
       res.json({
         route: constants.BASE_URL + '/to-dog-api/get-single-to-dog/',
         status: res.status,
-        error: err.message
+        error: true,
+        message: err.message
       })
     })
 }
@@ -95,7 +98,6 @@ exports.create_new_to_dog = (req, res, next) => {
   newToDog
     .save()
     .then(result => {
-      console.log('Result: ', result)
       res.status(201).json({
         route: constants.BASE_URL + '/to-dog-api/create-new-to-dog/',
         error: false,
@@ -119,7 +121,8 @@ exports.create_new_to_dog = (req, res, next) => {
       res.json({
         route: constants.BASE_URL + '/to-dog-api/create-new-to-dog/',
         status: res.status,
-        error: err.message
+        error: true,
+        message: err.message
       })
     })
 }
@@ -148,7 +151,8 @@ exports.update_existing_to_dog = (req, res, next) => {
       res.json({
         route: constants.BASE_URL + '/to-dog-api/update-existing-to-dog/',
         status: res.status,
-        error: err.message
+        error: true,
+        message: err.message
       })
     })
 }
@@ -176,7 +180,8 @@ exports.delete_existing_to_dog = (req, res, next) => {
       res.json({
         route: constants.BASE_URL + '/to-dog-api/delete-existing-to-dog/',
         status: res.status,
-        error: err.message
+        error: true,
+        message: err.message
       })
     })
 }
