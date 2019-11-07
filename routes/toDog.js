@@ -46,4 +46,16 @@ router.patch(
   ToDogController.update_existing_to_dog
 )
 
+/**
+ @route   DELETE /to-dog-api/delete-existing-to-dog/:toDogId
+ @desc    Delete an individual 'to-dog' based on a toDogId
+ @access  Public
+ @header  null
+ @body    null
+*/
+router.delete(
+  '/delete-existing-to-dog/:toDogId',
+  ToDogController.delete_existing_to_dog
+)
+
 module.exports = router

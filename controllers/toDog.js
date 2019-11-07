@@ -155,3 +155,31 @@ exports.update_existing_to_dog = (req, res, next) => {
       })
     })
 }
+
+exports.delete_existing_to_dog = (req, res, next) => {
+  const id = req.params.toDogId
+  ToDog.deleteOne({ _id: id })
+    .select('title body completed urgent _id')
+    .exec()
+    .then(result =>
+      res.status(200).json({
+        route: constants.BASE_URL + '/to-dog-api/delete-existing-to-dog/' + id,
+        status: 200,
+        error: false,
+        message: `The 'to-dog' with the id of ${id} has been successfully deleted`,
+        deletedCount: result.deletedCount,
+        request: {
+          type: 'GET',
+          url: constants.BASE_URL + '/to-dog-api/get-all-to-dogs/'
+        }
+      })
+    )
+    .catch(err => {
+      res.status = err.status || 500
+      res.json({
+        route: constants.BASE_URL + '/to-dog-api/delete-existing-to-dog/',
+        status: res.status,
+        error: err.message
+      })
+    })
+}
