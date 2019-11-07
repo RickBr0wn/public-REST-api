@@ -42,7 +42,7 @@ exports.get_all_to_dogs = (req, res, next) => {
       res.status = err.status || 500
       res.json({
         route: constants.BASE_URL + '/to-dog-api/get-all-to-dogs/',
-        status: err.status,
+        status: res.status,
         error: err.message
       })
     })
@@ -77,7 +77,7 @@ exports.get_single_to_dog = (req, res, next) => {
       res.status = err.status || 500
       res.json({
         route: constants.BASE_URL + '/to-dog-api/get-single-to-dog/',
-        status: err.status,
+        status: res.status,
         error: err.message
       })
     })
@@ -118,7 +118,39 @@ exports.create_new_to_dog = (req, res, next) => {
       res.status = err.status || 500
       res.json({
         route: constants.BASE_URL + '/to-dog-api/create-new-to-dog/',
-        status: err.status,
+        status: res.status,
+        error: err.message
+      })
+    })
+}
+
+exports.update_existing_to_dog = (req, res, next) => {
+  const id = req.params.toDogId
+  const updateOps = {}
+
+  updateOps[req.body.propName] = req.body.value
+
+  ToDog.updateOne({ _id: id }, { $set: updateOps })
+    .select('title body completed urgent _id')
+    .exec()
+    .then(result => {
+      res.status = 200
+      res.json({
+        route: constants.BASE_URL + '/to-dog-api/update-existing-to-dog/',
+        status: 200,
+        error: false,
+        message: `Updated the 'to-dog' with the id of ${id}`,
+        request: {
+          type: 'GET',
+          url: constants.BASE_URL + '/to-dog-api/get-single-to-dog/' + id
+        }
+      })
+    })
+    .catch(err => {
+      res.status = err.status || 500
+      res.json({
+        route: constants.BASE_URL + '/to-dog-api/update-existing-to-dog/',
+        status: res.status,
         error: err.message
       })
     })

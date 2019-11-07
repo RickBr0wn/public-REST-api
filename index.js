@@ -63,11 +63,15 @@ app.use((err, req, res, next) => {
       },
       {
         type: 'GET',
-        url: constants.BASE_URL + '/to-dog-api/get-single-to-dog/' + ':toDogId'
+        url: constants.BASE_URL + '/to-dog-api/get-single-to-dog/:toDogId'
       },
       {
         type: 'POST',
         url: constants.BASE_URL + '/to-dog-api/create-new-to-dog/'
+      },
+      {
+        type: 'PATCH',
+        url: constants.BASE_URL + '/to-dog-api/update-existing-to-dog/:toDogId'
       }
     ]
   })
