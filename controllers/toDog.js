@@ -126,11 +126,8 @@ exports.create_new_to_dog = (req, res, next) => {
 
 exports.update_existing_to_dog = (req, res, next) => {
   const id = req.params.toDogId
-  const updateOps = {}
 
-  updateOps[req.body.propName] = req.body.value
-
-  ToDog.updateOne({ _id: id }, { $set: updateOps })
+  ToDog.updateOne({ _id: id }, { $set: req.body })
     .select('title body completed urgent _id')
     .exec()
     .then(result => {
