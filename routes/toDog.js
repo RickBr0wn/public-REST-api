@@ -33,13 +33,12 @@ router.get('/get-single-to-dog/:toDogId', ToDogController.get_single_to_dog)
 router.post('/create-new-to-dog/', ToDogController.create_new_to_dog)
 
 /**
- @summary UPDATE A TO-DOG
+ @summary UPDATE AN EXISTING TO-DOG
  @route   PATCH /to-dog-api/update-existing-to-dog/:toDogId
  @desc    Update an individual to-dog based on a toDoId
  @access  Public
  @header  { Content-Type: application/json }
  @body    { "propName": String, "value": String }
- @example { propName: title, value: the updated value
 */
 router.patch(
   '/update-existing-to-dog/:toDogId',
@@ -47,6 +46,7 @@ router.patch(
 )
 
 /**
+ @summary DELETE AN EXISTING TO-DOG
  @route   DELETE /to-dog-api/delete-existing-to-dog/:toDogId
  @desc    Delete an individual 'to-dog' based on a toDogId
  @access  Public
